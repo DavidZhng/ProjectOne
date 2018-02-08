@@ -8,6 +8,7 @@ public class Balance {
 	}
 	public void deposit(double amount){
 		balance = balance + amount;
+		
 	}
 	public void withdrawal(double amount){
 		if(amount<=balance){

@@ -1,24 +1,34 @@
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+import java.awt.Graphics;
+import java.awt.Image;
 
 
 public class Bank extends JFrame{
+	private static JFrame a = new JFrame();
 	
 	private static JPanel menu = new JPanel();
 	
+	//bank image scaling
+	private static ImageIcon img1 = new ImageIcon("Jim's_Bank.png");
+	private static Image scaleImage = img1.getImage().getScaledInstance(175, 100,Image.SCALE_DEFAULT);
 	
-
-	private static JButton bank = new JButton("Bank");
+	private static JButton bank = new JButton(new ImageIcon(scaleImage));
 	private static JButton shops = new JButton("Shops");
 	private static JButton work = new JButton("Work");
 	private static JButton deposit = new JButton("Deposit");
@@ -32,20 +42,17 @@ public class Bank extends JFrame{
 	private static JLabel pmoney = new JLabel("");
 	private static JLabel btxt = new JLabel("Balance:$ ");
 	private static JLabel bbalance = new JLabel("");
-	
-	
-	
+	private static JLabel background = new JLabel(new ImageIcon("logo.png"));
+
 	public static void main(String[] args) {
-		
-		//pocket money
 	
 		//bank account balance
 		Balance you = new Balance();
+		
+		//pocket money
 		Cash tu = new Cash();
 		
-		Bank a = new Bank();
-	
-		
+
 		//frame a
 		a.setTitle("ProjectOne");
 		a.setBounds(175,25,1000,700);
@@ -72,10 +79,11 @@ public class Bank extends JFrame{
 	    //balance label
 	    menu.add(btxt);
 	    menu.add(bbalance);
+	    menu.add(background);
 	    
 	 
 		//button location
-		bank.setBounds(400, 100, 175, 75);
+		bank.setBounds(400, 100, 175, 100);
 		shops.setBounds(600, 400, 175, 75);
 		work.setBounds(200, 400, 175, 75);
 		deposit.setBounds(200, 400, 175, 75);
@@ -83,6 +91,8 @@ public class Bank extends JFrame{
 		main.setBounds(400, 100, 175, 75);
 		dtxt.setBounds(200, 500, 175, 25);
 		wtxt.setBounds(600, 500, 175, 25);
+		background.setBounds(0,0,1000,700);
+
 		
 		deposit.setVisible(false);
 		withdrawal.setVisible(false);
@@ -226,5 +236,6 @@ public class Bank extends JFrame{
  
 		
 		}
+	
 	}
 

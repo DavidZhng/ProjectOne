@@ -28,6 +28,12 @@ public class Bank extends JFrame{
 	private static JTextField dtxt = new JTextField();
 	private static JTextField wtxt = new JTextField();
 	
+	private static JLabel pocket = new JLabel("Pocket:$ ");
+	private static JLabel pmoney = new JLabel("");
+	private static JLabel btxt = new JLabel("Balance:$ ");
+	private static JLabel bbalance = new JLabel("");
+	
+	
 	
 	public static void main(String[] args) {
 		
@@ -39,10 +45,6 @@ public class Bank extends JFrame{
 		
 		Bank a = new Bank();
 	
-		JLabel pocket = new JLabel("Pocket:$ ");
-		JLabel pmoney = new JLabel("");
-		JLabel btext = new JLabel("Balance:$ ");
-		JLabel bbalance = new JLabel("");
 		
 		//frame a
 		a.setTitle("ProjectOne");
@@ -56,14 +58,19 @@ public class Bank extends JFrame{
 	    menu.add(bank);
 	    menu.add(shops);
 	    menu.add(work);
+	    //pocket money
 	    menu.add(pocket);
 	    menu.add(pmoney);
+	    //deposit/withdrawal buttons
 	    menu.add(deposit);
 	    menu.add(withdrawal);
+	    //return to main menu
 	    menu.add(main);
+	    //deposit/withdrawal textfields
 	    menu.add(dtxt);
 	    menu.add(wtxt);
-	    menu.add(btext);
+	    //balance label
+	    menu.add(btxt);
 	    menu.add(bbalance);
 	    
 	 
@@ -82,7 +89,7 @@ public class Bank extends JFrame{
 		main.setVisible(false);
 		dtxt.setVisible(false);
 		wtxt.setVisible(false);
-		btext.setVisible(false);
+		btxt.setVisible(false);
 		bbalance.setVisible(false);
 	   
 	    //top right money count
@@ -90,10 +97,21 @@ public class Bank extends JFrame{
         pmoney.setBounds(895, 25, 75, 50);
         pmoney.setText(tu.getCash() + "");
         
-        btext.setBounds(825, 25, 75, 50);
+        btxt.setBounds(825, 25, 75, 50);
         bbalance.setBounds(895, 25, 75, 50);
         bbalance.setText(you.getBalance() + "");
         
+      //interest
+		  Timer interest = new Timer(1000,  new ActionListener() {
+		      public void actionPerformed(ActionEvent e) {
+		    	  if(you.getBalance()>0){
+		    		 you.deposit(10.00);
+		    		 btxt.setText(you.getBalance()+"");
+		    	  }
+		    	  
+		      }
+		});
+		  
         main.addActionListener(new ActionListener(){
 
 			@Override
@@ -110,7 +128,7 @@ public class Bank extends JFrame{
 				main.setVisible(false);
 				dtxt.setVisible(false);
 				wtxt.setVisible(false);
-				btext.setVisible(false);
+				btxt.setVisible(false);
 				bbalance.setVisible(false);
 				
 				
@@ -130,6 +148,7 @@ public class Bank extends JFrame{
 						tu.deposit(dep);
 						bbalance.setText(you.getBalance() + "");
 						pmoney.setText(tu.getCash() + "");
+						dtxt.setText("");
 					
 					}
 			}
@@ -148,6 +167,7 @@ public class Bank extends JFrame{
 						tu.withdrawal(wit);
 						bbalance.setText(you.getBalance() + "");
 						pmoney.setText(tu.getCash() + "");
+						wtxt.setText("");
 						
 					}
 			}
@@ -171,7 +191,7 @@ public class Bank extends JFrame{
 			main.setVisible(true);
 			dtxt.setVisible(true);
 			wtxt.setVisible(true);
-			btext.setVisible(true);
+			btxt.setVisible(true);
 			bbalance.setVisible(true);
 			
 			
@@ -185,9 +205,10 @@ public class Bank extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				
-				
+				bank.setVisible(false);	
+				shops.setVisible(false);
+				work.setVisible(false);
 			}
-			
 		});
 		
 		work.addActionListener(new ActionListener(){
@@ -195,21 +216,13 @@ public class Bank extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				
+				bank.setVisible(false);	
+				shops.setVisible(false);
+				work.setVisible(false);
 			}
-			
 		});
-		//interest
-		  Timer interest = new Timer(1000,  new ActionListener() {
-		      public void actionPerformed(ActionEvent e) {
-		    	  if(you.getBalance()>0){
-		    		 you.deposit(10.00);
-		    	  }
-		    	  else{
-		    		 you.deposit(0);
-		    	  }
-		         
-		      }
-		});
+		
  
 		
 		}

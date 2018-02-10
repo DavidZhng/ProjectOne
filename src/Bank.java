@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.io.Serializable;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -104,7 +105,7 @@ public class Bank extends JFrame{
 	   
 	    //top right money count
 	    pocket.setBounds(825, 25, 75, 50);
-        pmoney.setBounds(895, 25, 75, 50);
+        pmoney.setBounds(895, 25, 40, 50);
         pmoney.setText(tu.getCash() + "");
         
         btxt.setBounds(825, 25, 75, 50);
@@ -227,9 +228,11 @@ public class Bank extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				
-				bank.setVisible(false);	
-				shops.setVisible(false);
-				work.setVisible(false);
+				tu.work(0.10);
+				pmoney.setText(tu.getCash() + "");
+				
+				
+				
 			}
 		});
 		

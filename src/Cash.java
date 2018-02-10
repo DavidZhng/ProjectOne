@@ -12,6 +12,9 @@ public class Cash {
 	public void withdrawal(double amount){
 		cash = cash + amount;
 	}
+	public void work(double amount){
+		cash = cash + amount;
+	}
 	public double getCash(){
 		return cash;
 	}

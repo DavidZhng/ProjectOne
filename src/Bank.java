@@ -1,23 +1,8 @@
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.io.Serializable;
-import java.net.URL;
-import java.text.DecimalFormat;
-import java.util.Scanner;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.Timer;
-import java.awt.Graphics;
-import java.awt.Image;
+import javax.swing.*;
+import java.awt.*;
 
 
 public class Bank extends JFrame{
@@ -25,35 +10,55 @@ public class Bank extends JFrame{
 	
 	private static JPanel menu = new JPanel();
 	
-	//bank image scaling
+	//image scaling
 	private static ImageIcon img1 = new ImageIcon("Jim's_Bank.png");
-	private static Image scaleImage = img1.getImage().getScaledInstance(175, 100,Image.SCALE_DEFAULT);
+	private static ImageIcon img2 = new ImageIcon("halal.jpg");
+	private static Image scaleImage1 = img1.getImage().getScaledInstance(175, 100,Image.SCALE_DEFAULT);
+	private static Image scaleImage2 = img2.getImage().getScaledInstance(175, 100,Image.SCALE_DEFAULT);
 	
-	private static JButton bank = new JButton(new ImageIcon(scaleImage));
+	private static JButton bank = new JButton(new ImageIcon(scaleImage1));
 	private static JButton shops = new JButton("Shops");
 	private static JButton work = new JButton("Work");
 	private static JButton deposit = new JButton("Deposit");
 	private static JButton withdrawal = new JButton("Withdrawal");
 	private static JButton main = new JButton("Main Menu");
+	private static JButton halal = new JButton(new ImageIcon(scaleImage2));
 	
-	private static JTextField dtxt = new JTextField();
-	private static JTextField wtxt = new JTextField();
+	private static JTextField depositlabel = new JTextField();
+	private static JTextField withdrawallabel = new JTextField();
 	
 	private static JLabel pocket = new JLabel("Pocket:$ ");
 	private static JLabel pmoney = new JLabel("");
-	private static JLabel btxt = new JLabel("Balance:$ ");
+	private static JLabel balancelabel = new JLabel("Balance:$ ");
 	private static JLabel bbalance = new JLabel("");
 	private static JLabel background = new JLabel(new ImageIcon("logo.png"));
-
-	public static void main(String[] args) {
+	private static JLabel halallabel = new JLabel("$5.00");
+	private static JLabel healthlabel = new JLabel("Health");
 	
-		//bank account balance
-		Balance you = new Balance();
-		
-		//pocket money
-		Cash tu = new Cash();
-		
+	private final static JProgressBar healthbar = new JProgressBar(0,100);
+	
+	//classes
+	private static Balance you = new Balance();
+	private static Cash tu = new Cash();
+	
 
+	
+   public static String helper(double n){
+   
+   		int count = 0;
+   		count += n * 100;
+   		String str = "" + count;
+   		return (str.substring(0, str.length()-2) + "." + str.substring(str.length()-2, str.length()));
+   			
+   		}
+
+  
+	public static void main(String[] args) {
+		
+		//hpbar
+		healthbar.setValue(100);
+		healthbar.setStringPainted(true);
+	
 		//frame a
 		a.setTitle("ProjectOne");
 		a.setBounds(175,25,1000,700);
@@ -75,12 +80,17 @@ public class Bank extends JFrame{
 	    //return to main menu
 	    menu.add(main);
 	    //deposit/withdrawal textfields
-	    menu.add(dtxt);
-	    menu.add(wtxt);
+	    menu.add(depositlabel);
+	    menu.add(withdrawallabel);
 	    //balance label
-	    menu.add(btxt);
+	    menu.add(balancelabel);
 	    menu.add(bbalance);
 	    menu.add(background);
+	    //shop options
+	    menu.add(halal);
+	    menu.add(halallabel);
+	    menu.add(healthbar);
+	    menu.add(healthlabel);
 	    
 	 
 		//button location
@@ -90,34 +100,43 @@ public class Bank extends JFrame{
 		deposit.setBounds(200, 400, 175, 75);
 		withdrawal.setBounds(600, 400, 175, 75);
 		main.setBounds(400, 100, 175, 75);
-		dtxt.setBounds(200, 500, 175, 25);
-		wtxt.setBounds(600, 500, 175, 25);
+		depositlabel.setBounds(200, 500, 175, 25);
+		withdrawallabel.setBounds(600, 500, 175, 25);
 		background.setBounds(0,0,1000,700);
+		halal.setBounds(200, 400, 175, 75);
+		halallabel.setBounds(200, 500, 175, 25);
+		healthbar.setBounds(25, 50, 300, 25);
+		healthlabel.setBounds(160,25,175,25);
+			
 
-		
+		//bank
 		deposit.setVisible(false);
 		withdrawal.setVisible(false);
 		main.setVisible(false);
-		dtxt.setVisible(false);
-		wtxt.setVisible(false);
-		btxt.setVisible(false);
+		depositlabel.setVisible(false);
+		withdrawallabel.setVisible(false);
+		balancelabel.setVisible(false);
 		bbalance.setVisible(false);
+		//shops
+		halal.setVisible(false);
+		halallabel.setVisible(false);
 	   
 	    //top right money count
 	    pocket.setBounds(825, 25, 75, 50);
-        pmoney.setBounds(895, 25, 40, 50);
-        pmoney.setText(tu.getCash() + "");
+        pmoney.setBounds(895, 25, 75, 50);
+        pmoney.setText(helper(tu.getCash()));
         
-        btxt.setBounds(825, 25, 75, 50);
-        bbalance.setBounds(895, 25, 75, 50);
-        bbalance.setText(you.getBalance() + "");
+        balancelabel.setBounds(825, 75, 75, 50);
+        bbalance.setBounds(895, 75, 75, 50);
+        bbalance.setText(helper(you.getBalance()));
+   
         
       //interest
 		  Timer interest = new Timer(1000,  new ActionListener() {
 		      public void actionPerformed(ActionEvent e) {
 		    	  if(you.getBalance()>0){
 		    		 you.deposit(10.00);
-		    		 btxt.setText(you.getBalance()+"");
+		    		 balancelabel.setText(you.getBalance()+"");
 		    	  }
 		    	  
 		      }
@@ -132,15 +151,15 @@ public class Bank extends JFrame{
 				bank.setVisible(true);	
 				shops.setVisible(true);
 				work.setVisible(true);
-				pocket.setVisible(true);
-				pmoney.setVisible(true);
 				deposit.setVisible(false);
 				withdrawal.setVisible(false);
 				main.setVisible(false);
-				dtxt.setVisible(false);
-				wtxt.setVisible(false);
-				btxt.setVisible(false);
+				depositlabel.setVisible(false);
+				withdrawallabel.setVisible(false);
+				balancelabel.setVisible(false);
 				bbalance.setVisible(false);
+				halal.setVisible(false);
+				halallabel.setVisible(false);
 				
 				
 			}
@@ -153,13 +172,13 @@ public class Bank extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 	
-				double dep = Double.parseDouble(dtxt.getText());
+				double dep = Double.parseDouble(depositlabel.getText());
 					if(dep<=tu.getCash()){
 						you.deposit(dep);
-						tu.deposit(dep);
-						bbalance.setText(you.getBalance() + "");
-						pmoney.setText(tu.getCash() + "");
-						dtxt.setText("");
+						tu.output(dep);
+						bbalance.setText(helper(you.getBalance()));
+						pmoney.setText(helper(tu.getCash()));
+						depositlabel.setText("");
 					
 					}
 			}
@@ -172,13 +191,13 @@ public class Bank extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			
-				double wit = Double.parseDouble(wtxt.getText());
+				double wit = Double.parseDouble(withdrawallabel.getText());
 					if(wit<=you.getBalance()){
 						you.withdrawal(wit);
-						tu.withdrawal(wit);
-						bbalance.setText(you.getBalance() + "");
-						pmoney.setText(tu.getCash() + "");
-						wtxt.setText("");
+						tu.input(wit);
+						bbalance.setText(helper(you.getBalance()));
+						pmoney.setText(helper(tu.getCash()));
+						withdrawallabel.setText("");
 						
 					}
 			}
@@ -195,14 +214,12 @@ public class Bank extends JFrame{
 			bank.setVisible(false);	
 			shops.setVisible(false);
 			work.setVisible(false);
-			pocket.setVisible(false);
-			pmoney.setVisible(false);
 			deposit.setVisible(true);
 			withdrawal.setVisible(true);
 			main.setVisible(true);
-			dtxt.setVisible(true);
-			wtxt.setVisible(true);
-			btxt.setVisible(true);
+			depositlabel.setVisible(true);
+			withdrawallabel.setVisible(true);
+			balancelabel.setVisible(true);
 			bbalance.setVisible(true);
 			
 			
@@ -219,6 +236,9 @@ public class Bank extends JFrame{
 				bank.setVisible(false);	
 				shops.setVisible(false);
 				work.setVisible(false);
+				main.setVisible(true);
+				halal.setVisible(true);
+				halallabel.setVisible(true);
 			}
 		});
 		
@@ -228,17 +248,42 @@ public class Bank extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				
-				tu.work(0.10);
-				pmoney.setText(tu.getCash() + "");
+				tu.input(.1);
+				pmoney.setText(helper(tu.getCash()));
 				
 				
 				
 			}
 		});
 		
- 
-		
+		halal.addActionListener(new halalaction());
+				
+	    }
+			
+		public static class halalaction implements ActionListener{
+				
+			    public void actionPerformed (ActionEvent e){
+			    	tu.output(5);
+					pmoney.setText(helper(tu.getCash()));
+			        new Thread(new thread1()).start(); 
+
+			    }
+
+			}
+		public static class thread1 implements Runnable{
+				
+			public void run(){
+			
+				for(int i=healthbar.getValue();i>=0;i--){
+					 healthbar.setValue(i);
+					 healthbar.repaint();
+					 try{
+						 Thread.sleep(4000);
+					 }
+					 catch (InterruptedException err){}
+
+				}
+			}
 		}
-	
-	}
+}
 

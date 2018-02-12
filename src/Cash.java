@@ -6,13 +6,10 @@ public class Cash {
 	public Cash(){
 		cash = 20.00;
 	}
-	public void deposit(double amount){	
+	public void output(double amount){	
 		cash = cash - amount;
 	}
-	public void withdrawal(double amount){
-		cash = cash + amount;
-	}
-	public void work(double amount){
+	public void input(double amount){
 		cash = cash + amount;
 	}
 	public double getCash(){

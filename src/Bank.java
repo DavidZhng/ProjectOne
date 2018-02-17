@@ -13,8 +13,10 @@ public class Bank extends JFrame{
 	//image scaling
 	private static ImageIcon img1 = new ImageIcon("Jim's_Bank.png");
 	private static ImageIcon img2 = new ImageIcon("halal.jpg");
+	private static ImageIcon img3 = new ImageIcon("salad.jpg");
 	private static Image scaleImage1 = img1.getImage().getScaledInstance(175, 100,Image.SCALE_DEFAULT);
 	private static Image scaleImage2 = img2.getImage().getScaledInstance(175, 100,Image.SCALE_DEFAULT);
+	private static Image scaleImage3 = img3.getImage().getScaledInstance(175, 100,Image.SCALE_DEFAULT);
 	
 	private static JButton bank = new JButton(new ImageIcon(scaleImage1));
 	private static JButton shops = new JButton("Shops");
@@ -23,6 +25,7 @@ public class Bank extends JFrame{
 	private static JButton withdrawal = new JButton("Withdrawal");
 	private static JButton main = new JButton("Main Menu");
 	private static JButton halal = new JButton(new ImageIcon(scaleImage2));
+	private static JButton salad = new JButton(new ImageIcon(scaleImage3));
 	
 	private static JTextField depositlabel = new JTextField();
 	private static JTextField withdrawallabel = new JTextField();
@@ -32,15 +35,17 @@ public class Bank extends JFrame{
 	private static JLabel balancelabel = new JLabel("Balance:$ ");
 	private static JLabel bbalance = new JLabel("");
 	private static JLabel background = new JLabel(new ImageIcon("logo.png"));
-	private static JLabel halallabel = new JLabel("$5.00");
 	private static JLabel healthlabel = new JLabel("Health");
+	private static JLabel halallabel = new JLabel("$5.00");
+	private static JLabel saladlabel = new JLabel("$10.00");
+	private static JLabel poorlabel = new JLabel("YOUR WALLET IS EMPTY SIR");
 	
 	private final static JProgressBar healthbar = new JProgressBar(0,100);
 	
 	//classes
 	private static Balance you = new Balance();
 	private static Cash tu = new Cash();
-	
+	private static int healthset = 0;
 
 	
    public static String helper(double n){
@@ -48,9 +53,13 @@ public class Bank extends JFrame{
    		int count = 0;
    		count += n * 100;
    		String str = "" + count;
-   		return (str.substring(0, str.length()-2) + "." + str.substring(str.length()-2, str.length()));
-   			
+   		if(str.length()>1){
+   			return (str.substring(0, str.length()-2) + "." + str.substring(str.length()-2, str.length()));	
    		}
+   		else{
+   			return str + ".00";
+   		}
+   }
 
   
 	public static void main(String[] args) {
@@ -91,6 +100,9 @@ public class Bank extends JFrame{
 	    menu.add(halallabel);
 	    menu.add(healthbar);
 	    menu.add(healthlabel);
+	    menu.add(salad);
+	    menu.add(saladlabel);
+	    menu.add(poorlabel);
 	    
 	 
 		//button location
@@ -107,6 +119,9 @@ public class Bank extends JFrame{
 		halallabel.setBounds(200, 500, 175, 25);
 		healthbar.setBounds(25, 50, 300, 25);
 		healthlabel.setBounds(160,25,175,25);
+		salad.setBounds(600, 400, 175, 75);
+		saladlabel.setBounds(600, 500, 175, 25);
+		poorlabel.setBounds(200, 300, 500,500);
 			
 
 		//bank
@@ -120,6 +135,9 @@ public class Bank extends JFrame{
 		//shops
 		halal.setVisible(false);
 		halallabel.setVisible(false);
+		salad.setVisible(false);
+		saladlabel.setVisible(false);
+		poorlabel.setVisible(false);
 	   
 	    //top right money count
 	    pocket.setBounds(825, 25, 75, 50);
@@ -160,6 +178,9 @@ public class Bank extends JFrame{
 				bbalance.setVisible(false);
 				halal.setVisible(false);
 				halallabel.setVisible(false);
+				salad.setVisible(false);
+				saladlabel.setVisible(false);
+			   
 				
 				
 			}
@@ -179,6 +200,9 @@ public class Bank extends JFrame{
 						bbalance.setText(helper(you.getBalance()));
 						pmoney.setText(helper(tu.getCash()));
 						depositlabel.setText("");
+					}
+					else{
+						poorlabel.setVisible(true);
 					
 					}
 			}
@@ -239,6 +263,9 @@ public class Bank extends JFrame{
 				main.setVisible(true);
 				halal.setVisible(true);
 				halallabel.setVisible(true);
+				salad.setVisible(true);
+				saladlabel.setVisible(true);
+			   
 			}
 		});
 		
@@ -260,30 +287,73 @@ public class Bank extends JFrame{
 				
 	    }
 			
-		public static class halalaction implements ActionListener{
+			public static class halalaction implements ActionListener{
 				
 			    public void actionPerformed (ActionEvent e){
-			    	tu.output(5);
-					pmoney.setText(helper(tu.getCash()));
-			        new Thread(new thread1()).start(); 
-
+			    	if(tu.getCash()>=5){
+			    		tu.output(5);
+			    		pmoney.setText(helper(tu.getCash()));
+			    		new Thread(new thread1()).start(); 
+			    	}
+			    	else{
+			    		poorlabel.setVisible(true);
+			    	}
 			    }
-
 			}
-		public static class thread1 implements Runnable{
+			public static class thread1 implements Runnable{
 				
-			public void run(){
+				public void run(){
+					healthset = healthbar.getValue();
+					for(int i=healthbar.getValue();i>=(healthset-10);i--){
+						 healthbar.setValue(i);
+						 healthbar.repaint();
+						 try{
+							 Thread.sleep(500);
+						 }
+						 catch (InterruptedException err){}
+	
+					}
+		salad.addActionListener(new saladaction());
+				
+			}
+				
+			public static class saladaction implements ActionListener{
+					
+				    public void actionPerformed (ActionEvent e){
+				    	
+					    if(tu.getCash()>=10){
+					    	tu.output(10);
+							pmoney.setText(helper(tu.getCash()));
+					    	new Thread(new thread2()).start();    
+					       	
+					    }
+					    else{
+					    	poorlabel.setVisible(true);
+					    }
+				    }
+			}
+			public static class thread2 implements Runnable{
+					
+				public void run(){
+				healthset = healthbar.getValue();
+	
+					for(int i=healthbar.getValue();i<=(healthset+10);i++){
+						
+						 healthbar.setValue(i);
+						 healthbar.repaint();
+						 try{
+							 Thread.sleep(500);
+						 }
+						 catch (InterruptedException err){}
 			
-				for(int i=healthbar.getValue();i>=0;i--){
-					 healthbar.setValue(i);
-					 healthbar.repaint();
-					 try{
-						 Thread.sleep(4000);
-					 }
-					 catch (InterruptedException err){}
-
+					}
 				}
 			}
 		}
 }
+		
+			
+
+		
+
 

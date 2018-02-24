@@ -38,36 +38,50 @@ public class Bank extends JFrame{
 	private static JLabel healthlabel = new JLabel("Health");
 	private static JLabel halallabel = new JLabel("$5.00");
 	private static JLabel saladlabel = new JLabel("$10.00");
-	private static JLabel poorlabel = new JLabel("YOUR WALLET IS EMPTY SIR");
+	private static JLabel hungerlabel = new JLabel("Hunger");
+	
+
 	
 	private final static JProgressBar healthbar = new JProgressBar(0,100);
+	private final static JProgressBar hungerbar = new JProgressBar(0,100);
 	
 	//classes
 	private static Balance you = new Balance();
 	private static Cash tu = new Cash();
 	private static int healthset = 0;
-
+	
+	
 	
    public static String helper(double n){
    
    		int count = 0;
    		count += n * 100;
    		String str = "" + count;
-   		if(str.length()>1){
-   			return (str.substring(0, str.length()-2) + "." + str.substring(str.length()-2, str.length()));	
+   		
+   			if(str.length()>1){
+   				return (str.substring(0, str.length()-2) + "." + str.substring(str.length()-2, str.length()));	
+   			}
+   			else{
+   				return str + ".00";
+   			}
    		}
-   		else{
-   			return str + ".00";
-   		}
-   }
 
   
 	public static void main(String[] args) {
 		
+		
+		//hunger passive initiate
+		new Thread(new thread1()).start();
+		
 		//hpbar
 		healthbar.setValue(100);
 		healthbar.setStringPainted(true);
-	
+		new Thread(new thread0()).start();
+
+		//hungerbar
+		hungerbar.setValue(100);
+		hungerbar.setStringPainted(true);
+		
 		//frame a
 		a.setTitle("ProjectOne");
 		a.setBounds(175,25,1000,700);
@@ -102,7 +116,10 @@ public class Bank extends JFrame{
 	    menu.add(healthlabel);
 	    menu.add(salad);
 	    menu.add(saladlabel);
-	    menu.add(poorlabel);
+
+	    menu.add(hungerbar);
+	    menu.add(hungerlabel);
+	    
 	    
 	 
 		//button location
@@ -121,8 +138,8 @@ public class Bank extends JFrame{
 		healthlabel.setBounds(160,25,175,25);
 		salad.setBounds(600, 400, 175, 75);
 		saladlabel.setBounds(600, 500, 175, 25);
-		poorlabel.setBounds(200, 300, 500,500);
-			
+		hungerbar.setBounds(25, 100, 300, 25);
+		hungerlabel.setBounds(160, 75,175,25);
 
 		//bank
 		deposit.setVisible(false);
@@ -137,7 +154,7 @@ public class Bank extends JFrame{
 		halallabel.setVisible(false);
 		salad.setVisible(false);
 		saladlabel.setVisible(false);
-		poorlabel.setVisible(false);
+	
 	   
 	    //top right money count
 	    pocket.setBounds(825, 25, 75, 50);
@@ -202,7 +219,7 @@ public class Bank extends JFrame{
 						depositlabel.setText("");
 					}
 					else{
-						poorlabel.setVisible(true);
+						JOptionPane.showMessageDialog(a, "You don't have the money!");
 					
 					}
 			}
@@ -222,7 +239,9 @@ public class Bank extends JFrame{
 						bbalance.setText(helper(you.getBalance()));
 						pmoney.setText(helper(tu.getCash()));
 						withdrawallabel.setText("");
-						
+					}
+					else{
+						JOptionPane.showMessageDialog(a, "You don't have the money!");
 					}
 			}
 		
@@ -293,14 +312,15 @@ public class Bank extends JFrame{
 			    	if(tu.getCash()>=5){
 			    		tu.output(5);
 			    		pmoney.setText(helper(tu.getCash()));
-			    		new Thread(new thread1()).start(); 
+			    		new Thread(new thread2()).start(); 
+			    	
 			    	}
 			    	else{
-			    		poorlabel.setVisible(true);
+			    		JOptionPane.showMessageDialog(a, "You're out of money!");
 			    	}
 			    }
 			}
-			public static class thread1 implements Runnable{
+			public static class thread2 implements Runnable{
 				
 				public void run(){
 					healthset = healthbar.getValue();
@@ -308,7 +328,7 @@ public class Bank extends JFrame{
 						 healthbar.setValue(i);
 						 healthbar.repaint();
 						 try{
-							 Thread.sleep(500);
+							 Thread.sleep(1);
 						 }
 						 catch (InterruptedException err){}
 	
@@ -324,15 +344,15 @@ public class Bank extends JFrame{
 					    if(tu.getCash()>=10){
 					    	tu.output(10);
 							pmoney.setText(helper(tu.getCash()));
-					    	new Thread(new thread2()).start();    
+					    	new Thread(new thread3()).start();    
 					       	
 					    }
 					    else{
-					    	poorlabel.setVisible(true);
+					    	JOptionPane.showMessageDialog(a, "You're out of money!");
 					    }
 				    }
 			}
-			public static class thread2 implements Runnable{
+			public static class thread3 implements Runnable{
 					
 				public void run(){
 				healthset = healthbar.getValue();
@@ -342,7 +362,7 @@ public class Bank extends JFrame{
 						 healthbar.setValue(i);
 						 healthbar.repaint();
 						 try{
-							 Thread.sleep(500);
+							 Thread.sleep(1);
 						 }
 						 catch (InterruptedException err){}
 			
@@ -350,6 +370,55 @@ public class Bank extends JFrame{
 				}
 			}
 		}
+		//hunger bar passive				
+			public static class thread1 implements Runnable{
+							
+				public void run(){
+				
+					for(int i=hungerbar.getValue();i>=0;i--){
+										
+						hungerbar.setValue(i);
+						hungerbar.repaint();
+						try{
+						Thread.sleep(1000);
+						}
+						catch (InterruptedException err){}
+							
+						}
+					}
+			}
+		
+			public static class thread0 implements Runnable{
+				
+				public void run(){
+					
+					while(true){
+						
+						if(healthbar.getValue()>66){
+							healthbar.setForeground(Color.GREEN);
+						
+						}
+						if(healthbar.getValue()<=66&&healthbar.getValue()>33){
+							healthbar.setForeground(Color.YELLOW);
+						
+						}
+					
+						if(healthbar.getValue()<=33&&healthbar.getValue()>0){
+							healthbar.setForeground(Color.RED);
+						
+						}
+						if(healthbar.getValue()==0){
+							JOptionPane.showMessageDialog(a, "You died!");
+							System.exit(0);
+						}
+					
+					}
+					
+				}
+			}
+	
+				
+					
 }
 		
 			

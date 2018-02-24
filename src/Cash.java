@@ -4,7 +4,7 @@ public class Cash {
 	private double cash;
 	
 	public Cash(){
-		cash = 20.00;
+		cash = 50.00;
 	}
 	public void output(double amount){	
 		cash = cash - amount;

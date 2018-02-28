@@ -52,10 +52,10 @@ public class Bank extends JFrame{
 	
 	
 	
-   public static String helper(double n){
+   public static String helper(double var){
    
    		int count = 0;
-   		count += n * 100;
+   		count += var * 100;
    		String str = "" + count;
    		
    			if(str.length()>1){
@@ -71,12 +71,12 @@ public class Bank extends JFrame{
 		
 		
 		//hunger passive initiate
-		new Thread(new thread1()).start();
+		new Thread(new hungerThread()).start();
 		
 		//hpbar
 		healthbar.setValue(100);
 		healthbar.setStringPainted(true);
-		new Thread(new thread0()).start();
+		new Thread(new hpcolorThread()).start();
 
 		//hungerbar
 		hungerbar.setValue(100);
@@ -296,6 +296,7 @@ public class Bank extends JFrame{
 				
 				tu.input(.1);
 				pmoney.setText(helper(tu.getCash()));
+				hungerbar.setValue(hungerbar.getValue()-10);
 				
 				
 				
@@ -312,27 +313,14 @@ public class Bank extends JFrame{
 			    	if(tu.getCash()>=5){
 			    		tu.output(5);
 			    		pmoney.setText(helper(tu.getCash()));
-			    		new Thread(new thread2()).start(); 
+			    		badFood MyRunnable = new badFood(10);
+			    		Thread halalThread = new Thread(MyRunnable);
+			    		halalThread.start();
 			    	
 			    	}
 			    	else{
 			    		JOptionPane.showMessageDialog(a, "You're out of money!");
 			    	}
-			    }
-			}
-			public static class thread2 implements Runnable{
-				
-				public void run(){
-					healthset = healthbar.getValue();
-					for(int i=healthbar.getValue();i>=(healthset-10);i--){
-						 healthbar.setValue(i);
-						 healthbar.repaint();
-						 try{
-							 Thread.sleep(1);
-						 }
-						 catch (InterruptedException err){}
-	
-					}
 		salad.addActionListener(new saladaction());
 				
 			}
@@ -344,7 +332,9 @@ public class Bank extends JFrame{
 					    if(tu.getCash()>=10){
 					    	tu.output(10);
 							pmoney.setText(helper(tu.getCash()));
-					    	new Thread(new thread3()).start();    
+					    	goodFood MyRunnable = new goodFood(10);
+					    	Thread saladThread = new Thread(MyRunnable);
+					    	saladThread.start();
 					       	
 					    }
 					    else{
@@ -352,26 +342,10 @@ public class Bank extends JFrame{
 					    }
 				    }
 			}
-			public static class thread3 implements Runnable{
-					
-				public void run(){
-				healthset = healthbar.getValue();
 	
-					for(int i=healthbar.getValue();i<=(healthset+10);i++){
-						
-						 healthbar.setValue(i);
-						 healthbar.repaint();
-						 try{
-							 Thread.sleep(1);
-						 }
-						 catch (InterruptedException err){}
-			
-					}
-				}
-			}
 		}
 		//hunger bar passive				
-			public static class thread1 implements Runnable{
+			public static class hungerThread implements Runnable{
 							
 				public void run(){
 				
@@ -385,10 +359,19 @@ public class Bank extends JFrame{
 						catch (InterruptedException err){}
 							
 						}
+				while(true){
+					
+					if(hungerbar.getValue()==0) {
+						badFood MyRunnable = new badFood(10);
+			    		Thread hungryThread = new Thread(MyRunnable);
+			    		hungryThread.start();
+			    		
+						}
 					}
+				}
 			}
 		
-			public static class thread0 implements Runnable{
+			public static class hpcolorThread implements Runnable{
 				
 				public void run(){
 					
@@ -416,7 +399,50 @@ public class Bank extends JFrame{
 					
 				}
 			}
+			//thread and method for food that decreases hp
+			public static class badFood implements Runnable{
+				
+				private int var;
+				
+				public badFood(int var){
+					this.var = var;
+				}
+				
+				public void run(){
+					healthset = healthbar.getValue();
+					for(int i=healthbar.getValue();i>=(healthset-var);i--){
+						 healthbar.setValue(i);
+						 healthbar.repaint();
+						 try{
+							 Thread.sleep(1);
+						 }
+						 catch (InterruptedException err){}
 	
+					}
+				}
+			}
+			//thread and method for food that increases hp
+			public static class goodFood implements Runnable{
+				
+				private int var;
+				
+				public goodFood(int var){
+					this.var = var;
+				}
+				
+				public void run(){
+					healthset = healthbar.getValue();
+					for(int i=healthbar.getValue();i<=(healthset+var);i++){
+						 healthbar.setValue(i);
+						 healthbar.repaint();
+						 try{
+							 Thread.sleep(1);
+						 }
+						 catch (InterruptedException err){}
+	
+					}
+				}
+			}
 				
 					
 }
